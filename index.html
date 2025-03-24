@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Monitoring Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #2a2a3a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #444;
+            text-align: left;
+        }
+        th {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Docker Monitoring Dashboard</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Container Name</th>
+                    <th>CPU Usage (%)</th>
+                    <th>Memory Usage (MB)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="container-data">
+                <tr>
+                    <td colspan="4">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function fetchDockerStats() {
+            const response = await fetch("http://localhost:5000/containers"); // API Endpoint (to be created in backend)
+            const data = await response.json();
+            const tableBody = document.getElementById("container-data");
+            tableBody.innerHTML = "";
+            
+            data.forEach(container => {
+                const row = `<tr>
+                    <td>${container.name}</td>
+                    <td>${container.cpu}</td>
+                    <td>${container.memory}</td>
+                    <td>${container.status}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+        
+        setInterval(fetchDockerStats, 5000); // Refresh every 5 seconds
+        fetchDockerStats();
+    </script>
+</body>
+</html>
