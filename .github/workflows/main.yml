@@ -1,0 +1,23 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: List Files (Debugging Step)
+        run: ls -la  # This will show the files in the repo for debugging
+
+      - name: Print Working Directory
+        run: pwd  # This will show the directory path
+
+      - name: Run Basic Command
+        run: echo "Hello! GitHub Actions is running successfully."
